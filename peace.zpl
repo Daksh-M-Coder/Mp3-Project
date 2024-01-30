@@ -1,0 +1,1 @@
+<?zpl version='2.0' encoding='utf-8'?><smil><head><title>peace</title></head><body><seq><media src="C:\ALL IN ONE\music\hare rama hare hare.mp3" /></seq></body></smil>
