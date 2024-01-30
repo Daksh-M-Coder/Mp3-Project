@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube MP3 Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #search {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 300px;
+        }
+
+        #playlist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        audio {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>YouTube MP3 Player</h1>
+    <input type="text" id="search" placeholder="Enter your music search">
+    <button onclick="searchYouTube()">Search</button>
+    <ul id="playlist"></ul>
+
+    <script>
+        function searchYouTube() {
+            const searchTerm = document.getElementById('search').value;
+
+            // Replace spaces with '+' for YouTube search query
+            const query = searchTerm.replace(/\s/g, '+');
+
+            // Use the YouTube API for developers (RapidAPI)
+            fetch(`https://youtube138.p.rapidapi.com/search?q=${query}`, {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Host': 'youtube138.p.rapidapi.com',
+                    'X-RapidAPI-Key': 'b1f411c27bmsh15dbe861994c484p1e2b46jsn8d80cdcca57d',
+                    'useQueryString': true
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const playlist = document.getElementById('playlist');
+                    playlist.innerHTML = '';
+
+                    // Display search results as a playlist
+                    data.items.forEach(item => {
+                        const videoId = item.id.videoId;
+                        const videoTitle = item.snippet.title;
+                        const videoArtist = item.snippet.channelTitle;
+
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<strong>${videoTitle}</strong> - ${videoArtist}
+                                              <audio controls>
+                                                  <source src="https://www.youtube.com/watch?v=${videoId}" type="audio/mpeg">
+                                                  Your browser does not support the audio tag.
+                                              </audio>`;
+                        playlist.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+
+</html>
